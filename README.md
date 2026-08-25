@@ -22,6 +22,8 @@ CarPlay loads wallpaper from pre-built cache files at launch. CarCanvas lets you
 
 ## Installation
 
+Download the IPA from [Releases](https://github.com/Dcsyhi1998/CarCanvas/releases).
+
 CarCanvas **cannot be installed the normal way**.
 
 It relies on the `com.apple.mobile.MobileHouseArrest` identity to access another app’s container (CarPlayWallpaper). These methods will **not** work:

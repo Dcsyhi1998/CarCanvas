@@ -22,6 +22,8 @@ CarPlay は起動時に、あらかじめ作っておいたキャッシュファ
 
 ## インストール
 
+IPA は [Releases](https://github.com/Dcsyhi1998/CarCanvas/releases) からダウンロードしてください。
+
 CarCanvas は **通常の方法ではインストールできません**。
 
 このアプリは `com.apple.mobile.MobileHouseArrest` の identity を前提に、他アプリ（CarPlayWallpaper）のコンテナへアクセスします。そのため次のようなインストールでは動きません。
