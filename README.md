@@ -12,13 +12,6 @@
 
 CarPlay loads wallpaper from pre-built cache files at launch. CarCanvas lets you create CPBitmap files and replace those caches.
 
-## Requirements
-
-- iPhone with **iOS 15+**
-- A paired **CarPlay** system (to create wallpaper caches first)
-- Ability to install an IPA signed with an **Enterprise / In-House** certificate  
-  (normal App Store / personal / AltStore installs will not work)
-
 ## Features
 
 - Create local CPBitmap wallpapers from photos
