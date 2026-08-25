@@ -1,0 +1,18 @@
+# Public release tree: track only README, docs assets, and IPA.
+# Everything else (source, Xcode, scripts, DerivedData, etc.) stays private.
+
+*
+!.gitignore
+
+# README
+!README.md
+!README.ja.md
+
+# Images referenced by README
+!docs/
+!docs/**
+
+# Release IPA only (not DerivedData or other build junk)
+!build/
+build/*
+!build/*.ipa
