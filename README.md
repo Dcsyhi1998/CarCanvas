@@ -10,149 +10,142 @@
 
 <p align="center">Overwrite CarPlay wallpaper caches with your own images.</p>
 
-CarPlay loads wallpaper from pre-built cache files at launch. CarCanvas lets you create CPBitmap files and replace those caches.
+CarPlay reads a previously created cache file when it starts. This app replaces that file with a custom CPBitmap.
 
 ## Features
 
 - Create local CPBitmap wallpapers from photos
-- History of exports with previews
-- Overwrite CarPlay wallpaper cache files (Dark / Light selectable)
-- Browse and manage CarPlay wallpaper cache files in-app
-- Built-in setup guide
+- Export history with previews
+- Overwrite the CarPlay wallpaper cache (select Dark / Light individually)
+- View and manage cache files within the app
+- Setup guide for first-time users
 
 ## Installation
 
-Download the IPA from [Releases](https://github.com/Dcsyhi1998/CarCanvas/releases).
+Download the IPA file from [Releases](https://github.com/Dcsyhi1998/CarCanvas/releases).
 
 CarCanvas **cannot be installed the normal way**.
 
-It relies on the `com.apple.mobile.MobileHouseArrest` identity to access another app’s container (CarPlayWallpaper). These methods will **not** work:
+This app relies on the `com.apple.mobile.MobileHouseArrest` identity and accesses another app’s container (CarPlayWallpaper). It will **not work** with the following installation methods:
 
-- App Store
-- Personal / development certificates via Xcode
-- **AltStore** (including paid AltStore-style certificates)
+- Installation from the App Store
+- Installation using an Xcode personal/development certificate
+- Sideloading with **AltStore** (regardless of whether you use the free or paid tier)
 
-You must **sign the IPA with an Enterprise / In-House certificate**, then install it.  
-An unsigned IPA, or one re-signed for AltStore, will not get the required identity/permissions.
+You must **sign the IPA with an Enterprise / In-House certificate** before installing it.
 
-Apps such as **ESign** can help with enterprise signing for free. Exact steps vary by tool and environment — **please look them up yourself**. This README does not cover detailed install instructions.
+If the IPA is unsigned or merely re-signed for AltStore, it will not receive the required permissions or identity and will not be able to access the wallpaper cache.
 
-Once CarCanvas is installed, you can change CarPlay wallpapers freely.
+There are also free apps such as **ESign** for signing and installing with an enterprise certificate. The specific installation procedure differs depending on the tool and environment, so **please research it yourself**. This README does not cover detailed installation instructions.
 
-## Credits
+Once CarCanvas is installed, you can freely change your CarPlay wallpaper.
 
-This project is based on the source and research of [0xjohnnydev/FilzaSlop](https://github.com/0xjohnnydev/FilzaSlop). Without FilzaSlop’s MobileHouseArrest container access and related work, CarCanvas’s CarPlayWallpaper cache operations would not exist. Thank you.
+## Credits / Acknowledgments
 
-> Special thanks to 0xjohnny for FilzaSlop and related research:  
+This project was made possible based on the source code and research from [0xjohnnydev/FilzaSlop](https://github.com/0xjohnnydev/FilzaSlop). Without the container access through MobileHouseArrest and related implementation demonstrated by FilzaSlop, CarCanvas would not have been able to manage the CarPlayWallpaper cache. Thank you.
+
+> Special thanks to 0xjohnny for FilzaSlop and related research:
 > https://github.com/0xjohnnydev/FilzaSlop
 
-FilzaSlop is a FilzaJailedDS-family fork that provides app-data container access and more. CarCanvas IPAs likewise assume the `com.apple.mobile.MobileHouseArrest` identity.
+FilzaSlop is a fork of the FilzaJailedDS series and provides access to app data containers and other features. The CarCanvas IPA similarly relies on the `com.apple.mobile.MobileHouseArrest` identity.
 
 ## How it works
 
-CarPlay does not regenerate wallpapers from scratch every time. At launch it reads **pre-created cache files**.
+CarPlay does not generate wallpapers from scratch every time. When it starts, it reads previously created cache files.
 
-Typical flow:
+The process is as follows:
 
-1. On CarPlay, select wallpapers so cache files are created
-2. In CarCanvas, create your own CPBitmap locally
-3. From History, overwrite matching CarPlay cache filenames
-4. **Power off and restart the iPhone** (once is enough)
-5. After reboot, CarPlay reloads the overwritten caches
+1. First, select wallpapers in CarPlay to create the cache files.
+2. Save your own wallpaper as a CPBitmap in CarCanvas.
+3. From the history, overwrite an existing cache using the same file name.
+4. **Turn off and restart your iPhone** (only once is required).
+5. After restarting, CarPlay reads the cache again and displays the overwritten wallpaper.
 
-Without caches, there is nothing to overwrite. **Creating caches on CarPlay first is required.**
+If no cache exists, there is nothing to overwrite. You must first create the cache in CarPlay.
 
-Overwrite alone does not refresh the UI immediately — CarPlay may keep old caches in memory. Waiting may eventually work, but timing is unknown. Powering the iPhone off is reliable. One restart after you finish overwriting is enough.
+The wallpaper will not be applied immediately after overwriting the cache. The CarPlay process continues running in the background and keeps using the old cache. The process may eventually terminate if you wait, but the required waiting time is unknown. The reliable method is to turn off and restart your iPhone. Because this is more reliable, it is the method used in these instructions. You only need to restart once after overwriting all the cache files.
 
-## Prep: create caches on CarPlay
+## Preparation: Create the Cache in CarPlay
 
-Open CarPlay **Settings → Wallpaper** and select each of the **6 patterned wallpapers** (top and middle rows), left to right. Each selection creates matching Dark / Light cache files.
+Open **Wallpaper in the CarPlay settings** and select the **six patterned wallpapers** in the top and middle rows, starting from the upper left. Each time you select one, the corresponding Dark / Light cache files are created.
 
 ![CarPlay wallpaper picker](docs/carplay-wallpaper-picker.png)
 
-| Order | Position | Color | Cache files |
-|------|----------|-------|-------------|
-| 1 | Top-left | Blue | `CARWallpaperBlue-Dark-14.cpbitmap`<br>`CARWallpaperBlue-Light-14.cpbitmap` |
-| 2 | Top-center | Purple | `CARWallpaperPurple-Dark-14.cpbitmap`<br>`CARWallpaperPurple-Light-14.cpbitmap` |
-| 3 | Top-right | Gray | `CARWallpaperGray-Dark-14.cpbitmap`<br>`CARWallpaperGray-Light-14.cpbitmap` |
-| 4 | Middle-left | Green | `CARWallpaperGreen-Dark-14.cpbitmap`<br>`CARWallpaperGreen-Light-14.cpbitmap` |
-| 5 | Middle-center | Brown | `CARWallpaperBrown-Dark-14.cpbitmap`<br>`CARWallpaperBrown-Light-14.cpbitmap` |
-| 6 | Middle-right | Red | `CARWallpaperRed-Dark-14.cpbitmap`<br>`CARWallpaperRed-Light-14.cpbitmap` |
-| — | (sometimes) | Black (pattern) | `CARWallpaperBlack-Dark-14.cpbitmap`<br>`CARWallpaperBlack-Light-14.cpbitmap` |
-| — | Bottom-left | Black (solid) | **Not created** |
-| — | Bottom-center | Dark gray | **Not created** |
-| — | Bottom-right | Brown (solid) | **Not created** |
+| Order | Position      | Color           | Cache files                                                                     |
+| ----- | ------------- | --------------- | ------------------------------------------------------------------------------- |
+| 1     | Top-left      | Blue            | `CARWallpaperBlue-Dark-14.cpbitmap`<br>`CARWallpaperBlue-Light-14.cpbitmap`     |
+| 2     | Top-center    | Purple          | `CARWallpaperPurple-Dark-14.cpbitmap`<br>`CARWallpaperPurple-Light-14.cpbitmap` |
+| 3     | Top-right     | Gray            | `CARWallpaperGray-Dark-14.cpbitmap`<br>`CARWallpaperGray-Light-14.cpbitmap`     |
+| 4     | Middle-left   | Green           | `CARWallpaperGreen-Dark-14.cpbitmap`<br>`CARWallpaperGreen-Light-14.cpbitmap`   |
+| 5     | Middle-center | Brown           | `CARWallpaperBrown-Dark-14.cpbitmap`<br>`CARWallpaperBrown-Light-14.cpbitmap`   |
+| 6     | Middle-right  | Red             | `CARWallpaperRed-Dark-14.cpbitmap`<br>`CARWallpaperRed-Light-14.cpbitmap`       |
+| —     | (sometimes)   | Black (pattern) | `CARWallpaperBlack-Dark-14.cpbitmap`<br>`CARWallpaperBlack-Light-14.cpbitmap`   |
+| —     | Bottom-left   | Black (solid)   | **Not created**                                                                 |
+| —     | Bottom-center | Dark gray       | **Not created**                                                                 |
+| —     | Bottom-right  | Brown (solid)   | **Not created**                                                                 |
 
-The bottom three solids are colors, not images — selecting them does **not** create cache files.
+The three solid-color wallpapers in the bottom row (black, dark gray, and brown) are treated as colors rather than images. Selecting them does not create cache files, so they cannot be overwritten.
 
-Selecting the 6 patterned wallpapers once is enough, as long as the caches remain.
+Preparation is complete once you have selected each of the six patterned wallpapers once. You do not need to repeat this process unless the cache is deleted.
 
-The trailing `-14` may differ by environment. CarCanvas uses the real filenames on device.
+The `-14` suffix in the file name may differ depending on the environment. On the CarCanvas export screen, the names found on the actual device are used as they are.
 
 ## Dark and Light
 
-Each patterned wallpaper has a **Dark** and **Light** pair.
+Each patterned wallpaper comes as a pair: **Dark** and **Light**.
 
-| File | Used when |
-|------|-----------|
-| `*-Dark-14.cpbitmap` | Night, or Appearance set to Dark |
-| `*-Light-14.cpbitmap` | Day / bright, or Appearance set to Light |
+| File                  | Used when                                                                         |
+| --------------------- | --------------------------------------------------------------------------------- |
+| `*-Dark-14.cpbitmap`  | At night or when the appearance is set to dark mode                               |
+| `*-Light-14.cpbitmap` | In the morning or in bright conditions (when the appearance is set to light mode) |
 
-This switching only applies when CarPlay Appearance is **Automatic**. Always Dark → only Dark is used. Always Light → only Light.
+This switching occurs only when the CarPlay appearance mode is set to **Automatic**.
+If it is always set to dark, only the Dark version is used and the Light version is not loaded.
 
-Write the same image to both for a fixed look. Write different images for **day wallpaper A / night wallpaper B**.
+If you set the same wallpaper for both Dark and Light, the image will remain the same even when the time of day changes. If you set different images, they will automatically switch, such as **Wallpaper A in the morning and Wallpaper B** at night.
 
-## Using CarCanvas
+## How to Use CarCanvas
 
-### 1. Save a local wallpaper
+### 1. Save Your Wallpaper Locally
 
 1. Open CarCanvas
 2. Open **Wallpaper**
-3. Pick an image
-4. Tap **Create local CPBitmap**
+3. Select the image you want to use
+4. Press Create CPBitmap Locally
 
-The image is stored as CPBitmap and appears in **History**. CarPlay is unchanged at this point.
+The image is saved in the app as a CPBitmap and remains in **History**. The CarPlay display does not change at this point.
 
-### 2. Export to CarPlay caches
+### 2. Export to the CarPlay Cache
 
 1. Open **History**
-2. Tap the saved entry
-3. Choose **Export to CarPlay Wallpaper**
-4. Select Dark and/or Light destinations to overwrite
-5. Tap **Overwrite**
+2. Tap the item you just saved
+3. Select **Export to CarPlay Wallpaper**
+4. A list of CarPlay cache files will appear. Select the Dark / Light file you want to overwrite
+5. Execute **Overwrite**
 
-History Dark / Light map to cache Dark / Light. Same filenames are always overwritten.
+The Dark / Light versions in the history are exported to their corresponding Dark / Light cache files. Files with the same name are always overwritten.
 
-For one look day and night, overwrite both Dark and Light of the pattern you want (Blue, Purple, Gray, …). For different day/night art, write wallpaper A to Light and B to Dark.
-
-Changes do not appear immediately after overwrite.
+If you want to use the same image, export the same history item to both the Dark and Light versions of the pattern you want to use (blue, purple, gray, etc.). If you want different images for morning and night, export Wallpaper A to Light and Wallpaper B to Dark separately. If the CarPlay appearance is set to Automatic, they will switch according to the brightness.
 
 ### 3. Restart the iPhone (once)
 
-When overwrites are done, **power off the iPhone and turn it back on**. That ends CarPlay’s process so it reloads caches on next launch.
+After overwriting the cache with your own wallpaper, **you must turn off and restart your iPhone**. Doing this once will reliably terminate the CarPlay process, and the new cache should be loaded after startup.
 
-Waiting may eventually work; power cycle is reliable.
+If you wait, the process will eventually terminate, but it is not known whether you need to wait minutes or hours.
 
-## Troubleshooting
+Therefore, turning off the device is more reliable.
 
-- **No export targets / cache not found**  
-  You have not selected the 6 patterned wallpapers yet. In CarPlay Wallpaper, select Blue → Purple → Gray → Green → Brown → Red again.
-- **Using a solid color wallpaper**  
-  Bottom black / dark gray / brown do not create caches. Use the 6 patterned ones.
-- **Overwrote but nothing changed**  
-  Restart the iPhone (full power off). Replugging CarPlay or killing processes in-app is often not enough.
+## Additional Information
 
-## Notes
-
-In **CarPlay Wallpaper**, you can browse the cache folder, import, rename, duplicate, and delete files.
+On the **CarPlay Wallpaper** screen in CarCanvas, you can directly view the cache folder that will be overwritten. You can also import, rename, duplicate, and delete files.
 
 ## Related
 
-| Name | Role |
-|------|------|
-| **CarCanvas** (this app) | Browse and overwrite CarPlay wallpaper caches |
-| **[FilzaSlop](https://github.com/0xjohnnydev/FilzaSlop)** | Upstream open source for container access (0xjohnny) |
+| Name                                                      | Role                                                                                                        |
+| --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| **CarCanvas** (this app)                                  | View and overwrite the CarPlay wallpaper cache                                                              |
+| **[FilzaSlop](https://github.com/0xjohnnydev/FilzaSlop)** | Open-source project by 0xjohnny that provided the foundation for container access and related functionality |
 
 ## Disclaimer
 
-CarCanvas depends on undocumented system behavior and a special app identity. It may break after iOS or CarPlay updates. Use at your own risk. Enterprise signing and sideloading may also violate Apple’s terms or local policy — that is your responsibility.
+CarCanvas relies on private system behavior and a special identity. It may stop working after an iOS or CarPlay update. Use it at your own risk. Enterprise certificates and sideloading may violate Apple’s terms or the policies of your environment. Users are responsible for making that determination and accepting the consequences.
